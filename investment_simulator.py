@@ -1,21 +1,22 @@
 import random
 
-
 def main():
     while True:
-        starting_capital = float(input("What is your starting capital? "))
-        if starting_capital >= 0:
-            break
-    
-    monthly_contribution = float(input("Enter your monthly contribution: "))
-    years = int(input("How long are you plannning to invest(yrs)? "))
-    simulations = int(input("Enter number of simulations: "))
+        try:
+            starting_capital = float(input("What is your starting capital? "))
+            monthly_contribution = float(input("Enter your monthly contribution: "))
+            years = int(input("How long are you plannning to invest(yrs)? "))
+            simulations = int(input("Enter number of simulations: "))
+            if validate(starting_capital, monthly_contribution, years, simulations):
+                break
+        except(ValueError):
+            print("Enter valid numerical value")
+            continue
     portfolios = run_simulation(starting_capital, monthly_contribution, years, simulations)
     highest, lowest, average = statistics(portfolios)
     print(f"Lowest final value: R{lowest}\nHighest final value: R{highest}\nAverage: R{average}")
 
 def simulate_investment(starting_capital, monthly_contribution, years):
-    
     portfolio = starting_capital
     for month in range(years*12):
         portfolio += portfolio*random.uniform(-0.05, 0.05) + monthly_contribution
@@ -32,7 +33,11 @@ def statistics(portfolios):
     lowest = min(portfolios)
     highest = max(portfolios)
     return (highest, lowest, average)
-        
-        
+
+def validate(starting_capital, monthly_contribution, years, simulations):
+    if starting_capital < 0 or monthly_contribution < 0 or years <= 0 or simulations <= 0:
+        print("Enter valid numerical values")
+        return False
+    return True
         
 main()
